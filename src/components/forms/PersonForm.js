@@ -37,6 +37,7 @@ const PersonForm = (props) => {
   return (
     <div className="card">
       <div className="card-body">
+        <button onClick={props.handleHideForm} className="btn btn-danger mb-2">Close</button>
         <form onSubmit={handleSubmit}>
           <div className="row g-2 mb-2">
             <div className="col">

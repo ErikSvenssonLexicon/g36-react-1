@@ -1,5 +1,6 @@
-import {useState} from 'react';
+import { useState } from "react";
 import PersonForm from "./forms/PersonForm";
+import People from "./people/People";
 import Person from "./Person";
 
 const person = {
@@ -21,19 +22,27 @@ const person = {
 };
 
 const PeopleApp = (props) => {
+  const [people, setPeople] = useState([person]);
+  const [formIsVisible, setFormIsVisible] = useState(false);
 
-  const [people, setPeople] = useState([person])
+  const handleAddPerson = (person) => {
+    setPeople([...people, person]);
+  };
 
+  const handleShowForm = () => {
+    setFormIsVisible(true);
+  };
 
-  const handleAddPerson = (person) =>{    
-    setPeople([...people, person])  
+  const handleHideForm = () =>{
+    setFormIsVisible(false);
   }
 
   
 
   return (
     <div className="container">
-      <PersonForm handleAddPerson={handleAddPerson} />      
+      {formIsVisible && <PersonForm handleHideForm={handleHideForm} handleAddPerson={handleAddPerson} />}
+      <People formIsVisible={formIsVisible} handleShowForm={handleShowForm} people={people} />
     </div>
   );
 };
