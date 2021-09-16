@@ -1,7 +1,6 @@
 import { useState } from "react";
 import PersonForm from "./forms/PersonForm";
 import People from "./people/People";
-import Person from "./Person";
 
 const person = {
   id: 34252,

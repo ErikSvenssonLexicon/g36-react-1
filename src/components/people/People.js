@@ -1,7 +1,4 @@
-import { useState } from "react";
-
-const People = (props) => {
-  const { buttonIsDisabled, setButtonIsDisabled } = useState(false);
+const People = (props) => {  
 
   const content = props.people.map((person) => {
     return (
