@@ -1,8 +1,12 @@
-const People = (props) => {  
+const People = (props) => {
+  
+  const handleOnClickDelete = (id) =>{
+    props.handleDeletePerson(id);
+  } 
 
   const content = props.people.map((person) => {
     return (
-      <tr key={person.id}>
+      <tr key={person.id} onClick={() => handleOnClickDelete(person.id)}>
         <td>{person.firstName}</td>
         <td>{person.lastName}</td>
         <td>{person.birthDate}</td>

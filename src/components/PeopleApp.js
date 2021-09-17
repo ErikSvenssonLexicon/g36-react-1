@@ -32,16 +32,30 @@ const PeopleApp = (props) => {
     setFormIsVisible(true);
   };
 
-  const handleHideForm = () =>{
+  const handleHideForm = () => {
     setFormIsVisible(false);
-  }
+  };
 
-  
+  const handleDeletePerson = (id) => {
+    setPeople((previousState) =>
+      previousState.filter((person) => person.id !== id)
+    );
+  };
 
   return (
     <div className="container">
-      {formIsVisible && <PersonForm handleHideForm={handleHideForm} handleAddPerson={handleAddPerson} />}
-      <People formIsVisible={formIsVisible} handleShowForm={handleShowForm} people={people} />
+      {formIsVisible && (
+        <PersonForm
+          handleHideForm={handleHideForm}
+          handleAddPerson={handleAddPerson}
+        />
+      )}
+      <People
+        handleDeletePerson={handleDeletePerson}
+        formIsVisible={formIsVisible}
+        handleShowForm={handleShowForm}
+        people={people}
+      />
     </div>
   );
 };
