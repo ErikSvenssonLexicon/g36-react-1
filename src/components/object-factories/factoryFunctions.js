@@ -1,6 +1,6 @@
-export const createPerson = (firstName, lastName, birthDate) => {
+export const createPersonNew = (firstName, lastName, birthDate) => {
   return {
-    id: Math.floor(Math.random() * 100000),
+    id: null,
     firstName: firstName,
     lastName: lastName,
     birthDate: birthDate,
@@ -17,5 +17,25 @@ export const createPerson = (firstName, lastName, birthDate) => {
     },
   };
 };
+
+export const createPerson = (id, firstName, lastName, birthDate) =>{
+  return {
+    id,
+    firstName,
+    lastName,
+    birthDate,
+    getAge() {
+      const today = new Date();
+      const date = new Date(birthDate);
+
+      let age = today.getFullYear() - date.getFullYear();
+      const months = today.getMonth() - date.getMonth();
+      if (months < 0 || (months === 0 && today.getDate() < date.getDate())) {
+        age--;
+      }
+      return age;
+    },
+  };  
+}
 
 

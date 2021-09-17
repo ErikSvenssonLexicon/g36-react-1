@@ -1,8 +1,12 @@
+import { Fragment } from "react";
+import Table from "../ui/Table";
+import TableBody from "../ui/TableBody";
+import TableHead from "../ui/TableHead";
+
 const People = (props) => {
-  
-  const handleOnClickDelete = (id) =>{
+  const handleOnClickDelete = (id) => {
     props.handleDeletePerson(id);
-  } 
+  };  
 
   const content = props.people.map((person) => {
     return (
@@ -26,24 +30,13 @@ const People = (props) => {
   );
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <table className="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">Birth Date</th>
-              <th scope="col">Age</th>
-            </tr>
-          </thead>
-          <tbody>{content}</tbody>
-        </table>
-        <div className="d-grid">
-          {button}
-        </div>
-      </div>
-    </div>
+    <Fragment>
+      <Table className="table table-hover">
+        <TableHead headers={["First Name", "Last Name", "Birth Date", "Age"]} />
+        <TableBody>{content}</TableBody>
+      </Table>      
+      <div className="d-grid">{button}</div>
+    </Fragment>
   );
 };
 

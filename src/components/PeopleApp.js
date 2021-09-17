@@ -1,28 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import PersonForm from "./forms/PersonForm";
 import People from "./people/People";
-
-const person = {
-  id: 34252,
-  firstName: "Erik",
-  lastName: "Svensson",
-  birthDate: "1976-09-11",
-  getAge() {
-    const today = new Date();
-    const date = new Date(this.birthDate);
-
-    let age = today.getFullYear() - date.getFullYear();
-    const months = today.getMonth() - date.getMonth();
-    if (months < 0 || (months === 0 && today.getDate() < date.getDate())) {
-      age--;
-    }
-    return age;
-  },
-};
+import Card from "./ui/Card";
+import { createPerson } from "./object-factories/factoryFunctions";
+import Spinner from "./ui/Spinner";
 
 const PeopleApp = (props) => {
-  const [people, setPeople] = useState([person]);
+  const [people, setPeople] = useState([]);
   const [formIsVisible, setFormIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+
+  const findAllPeople = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`http://localhost:8080/todo/api/v1/people`);
+
+      const data = await response.json();      
+
+      if (!response.ok) {        
+        throw new Error("Something went wrong");
+      }
+
+      const peopleList = [];
+
+      for (const person of data._embedded.personDTOList) {
+        peopleList.push(
+          createPerson(
+            person.personId,
+            person.firstName,
+            person.lastName,
+            person.birthDate
+          )
+        );
+      }
+      setPeople(peopleList);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    findAllPeople();
+  }, [findAllPeople]);
 
   const handleAddPerson = (person) => {
     setPeople([...people, person]);
@@ -45,17 +67,24 @@ const PeopleApp = (props) => {
   return (
     <div className="container">
       {formIsVisible && (
-        <PersonForm
-          handleHideForm={handleHideForm}
-          handleAddPerson={handleAddPerson}
-        />
+        <Card>
+          <PersonForm
+            handleHideForm={handleHideForm}
+            handleAddPerson={handleAddPerson}
+          />
+        </Card>
       )}
-      <People
-        handleDeletePerson={handleDeletePerson}
-        formIsVisible={formIsVisible}
-        handleShowForm={handleShowForm}
-        people={people}
-      />
+      <Card>
+        {!isLoading && (
+          <People
+            handleDeletePerson={handleDeletePerson}
+            formIsVisible={formIsVisible}
+            handleShowForm={handleShowForm}
+            people={people}
+          />
+        )}
+        {isLoading && <Spinner />}
+      </Card>
     </div>
   );
 };
